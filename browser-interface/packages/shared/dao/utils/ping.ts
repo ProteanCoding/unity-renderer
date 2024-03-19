@@ -10,26 +10,27 @@ export async function ask(url: string, timeoutMs: number = 5000): Promise<AskRes
       const started = now()
 
       http.timeout = timeoutMs
+
       http.onreadystatechange = () => {
         if (http.readyState === XMLHttpRequest.DONE) {
           try {
             if (http.status !== 200) {
               resolve({
                 httpStatus: http.status,
-                status: ServerConnectionStatus.UNREACHABLE
+                status: ServerConnectionStatus.UNREACHABLE,
               })
             } else {
               resolve({
                 httpStatus: http.status,
                 status: ServerConnectionStatus.OK,
                 elapsed: now() - started,
-                result: JSON.parse(http.responseText)
+                result: JSON.parse(http.responseText),
               })
             }
           } catch (e) {
             defaultLogger.error('Error fetching status of Catalyst server', e)
             resolve({
-              status: ServerConnectionStatus.UNREACHABLE
+              status: ServerConnectionStatus.UNREACHABLE,
             })
           }
         }
@@ -38,7 +39,7 @@ export async function ask(url: string, timeoutMs: number = 5000): Promise<AskRes
       http.open('GET', url, true)
 
       try {
-        http.send(null)
+        http.send()
       } catch (exception) {
         resolve({
           status: ServerConnectionStatus.UNREACHABLE

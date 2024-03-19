@@ -137,7 +137,7 @@ namespace DCL.Helpers
         {
             Assert.IsNotNull(listener, "Listener can't be null!");
 
-            // Not using assert here because this case is more probable, I want to fail silently in this case.
+            // Not using assert here because this case is more probable, we want to fail silently in this case.
             if (!subscriptions.Contains(listener))
                 return;
 

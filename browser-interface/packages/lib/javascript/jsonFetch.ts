@@ -16,16 +16,16 @@ export async function jsonFetch(url: string): Promise<any> {
   requestCache.set(url, futureCache)
 
   fetch(url).then(
-    async ($) => {
-      if (!$.ok) {
+    async (response) => {
+      if (!response.ok) {
         // do not cache in case of error fetching
         requestCache.delete(url)
         futureCache.reject(new Error('Response not ok - ' + url))
       } else {
         try {
-          futureCache.resolve(await $.json())
+          futureCache.resolve(await response.json())
         } catch (e: any) {
-          console['error']('Error parsing json: ' + url, $)
+          console.error('Error parsing json: ' + url, response)
           futureCache.reject(e)
         }
       }
